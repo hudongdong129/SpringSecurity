@@ -1,8 +1,14 @@
 package com.security.demo.controller;
 
 import com.security.demo.code.ImageCode;
+import com.security.demo.code.SmsCodeSender;
+import com.security.demo.code.ValidateCode;
+import org.apache.commons.lang.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -22,8 +28,14 @@ public class ValidateCodeController {
     //定义存入session的key
     public static final String SESSION_KEY = "SESSION_IMAGE_CODE";
 
+    public static final String SESSION_key_SMS = "SESSION_SMS_CODE";
+
     /** 处理session */
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+
+
+    @Autowired
+    private SmsCodeSender smsCodeSender;
 
     @GetMapping("/code/image")
     public void createCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -31,6 +43,25 @@ public class ValidateCodeController {
         sessionStrategy.setAttribute(new ServletWebRequest(request),SESSION_KEY,imageCode);
         ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
     }
+
+
+
+    @GetMapping("/code/sms")
+    public void createSmsCode(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletRequestBindingException {
+        ValidateCode smsCode = createSmsCode(new ServletWebRequest(request));
+        sessionStrategy.setAttribute(new ServletWebRequest(request),SESSION_key_SMS,smsCode);
+        String mobile = ServletRequestUtils.getRequiredStringParameter(request,"mobile");
+        smsCodeSender.send(mobile, smsCode.getCode());
+    }
+
+
+
+    private ValidateCode createSmsCode(ServletWebRequest servletWebRequest) {
+        String code = RandomStringUtils.randomNumeric(4);
+
+        return new ValidateCode(code,60);
+    }
+
 
     private ImageCode createImageCode(ServletWebRequest servletWebRequest) {
         int width = 67;
