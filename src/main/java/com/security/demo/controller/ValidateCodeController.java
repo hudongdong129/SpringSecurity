@@ -19,6 +19,7 @@ import java.util.Random;
 @RestController
 public class ValidateCodeController {
 
+    //定义存入session的key
     public static final String SESSION_KEY = "SESSION_IMAGE_CODE";
 
     /** 处理session */
@@ -79,7 +80,6 @@ public class ValidateCodeController {
         if (bc > 255) {
             bc = 255;
         }
-
         int r = fc + random.nextInt((bc - fc));
         int g = fc + random.nextInt((bc - fc));
         int b = fc = random.nextInt((bc - fc));

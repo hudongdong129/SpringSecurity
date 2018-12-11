@@ -4,10 +4,15 @@ import com.security.demo.authentication.DemoAuthenticationFailureHandler;
 import com.security.demo.authentication.DemoAuthenticationSuccessHandler;
 import com.security.demo.filter.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -17,6 +22,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DemoAuthenticationFailureHandler demoAuthenticationFailureHandler;
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+//        tokenRepository.setCreateTableOnStartup(true);
+        return tokenRepository;
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -29,6 +46,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .loginProcessingUrl("/authentication/form")//因为SpringSecurity默认是login请求为登录请求，所以需要配置自己的请求路径
             .successHandler(demoAuthenticationSuccessHandler)//登录成功的操作
             .failureHandler(demoAuthenticationFailureHandler)//登录失败的操作
+                .and()
+                .rememberMe()
+                .tokenRepository(persistentTokenRepository())
+
             .and()
             .authorizeRequests()//对请求进行授权
             .antMatchers("/login.html","/code/image").permitAll()//表示login.html路径不会被拦截

@@ -18,6 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 定义一个验证码的拦截器
+ * @author hdd
+ */
 public class ValidateCodeFilter extends OncePerRequestFilter {
 
     private DemoAuthenticationFailureHandler demoAuthenticationFailureHandler;
@@ -41,6 +45,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
 
+    //具体的验证流程
     private void validate(ServletWebRequest request) throws ServletRequestBindingException {
         ImageCode codeInSession = (ImageCode) sessionStrategy.getAttribute(request, ValidateCodeController.SESSION_KEY);
         String codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), "imageCode");

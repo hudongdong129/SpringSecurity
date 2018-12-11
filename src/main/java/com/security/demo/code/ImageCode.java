@@ -5,10 +5,13 @@ import java.time.LocalDateTime;
 
 public class ImageCode {
 
+    /** 验证码 */
     private String code;
 
+    /** 判断过期时间 */
     private LocalDateTime expireTime;
 
+    /** 生成的图片验证码 */
     private BufferedImage image;
 
 
@@ -17,6 +20,11 @@ public class ImageCode {
         this.expireTime = LocalDateTime.now().plusSeconds(expireIn);
         this.image = image;
     }
+
+    public boolean isExpried() {
+        return LocalDateTime.now().isAfter(expireTime);
+    }
+
 
     public String getCode() {
         return code;
@@ -43,8 +51,6 @@ public class ImageCode {
     }
 
 
-    public boolean isExpried() {
-        return LocalDateTime.now().isAfter(expireTime);
-    }
+
 
 }
