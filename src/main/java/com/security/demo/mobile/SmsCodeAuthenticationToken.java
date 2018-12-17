@@ -30,16 +30,6 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
         setAuthenticated(false);
     }
 
-    /**
-     * This constructor should only be used by <code>AuthenticationManager</code> or
-     * <code>AuthenticationProvider</code> implementations that are satisfied with
-     * producing a trusted (i.e. {@link #isAuthenticated()} = <code>true</code>)
-     * authentication token.
-     *
-     * @param principal
-     * @param credentials
-     * @param authorities
-     */
     public SmsCodeAuthenticationToken(Object principal,
                                                Collection<? extends GrantedAuthority> authorities) {
         super(authorities);

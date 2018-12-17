@@ -19,6 +19,7 @@ public class SmsCodeAuthenticationFilter extends
     public static final String SPRING_SECURITY_FORM_MOBILE_KEY = "mobile";
 
     private String mobileParameter = SPRING_SECURITY_FORM_MOBILE_KEY;
+    //表示只支持post请求
     private boolean postOnly = true;
 
     // ~ Constructors
@@ -68,36 +69,21 @@ public class SmsCodeAuthenticationFilter extends
      * Provided so that subclasses may configure what is put into the authentication
      * request's details property.
      *
-     * @param request that an authentication request is being created for
-     * @param authRequest the authentication request object that should have its details
-     * set
+     *
      */
     protected void setDetails(HttpServletRequest request,
                               SmsCodeAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 
-    /**
-     * Sets the parameter name which will be used to obtain the username from the login
-     * request.
-     *
-     * @param usernameParameter the parameter name. Defaults to "username".
-     */
+
     public void setMobileParameter(String usernameParameter) {
         Assert.hasText(usernameParameter, "Username parameter must not be empty or null");
         this.mobileParameter = usernameParameter;
     }
 
 
-    /**
-     * Defines whether only HTTP POST requests will be allowed by this filter. If set to
-     * true, and an authentication request is received which is not a POST request, an
-     * exception will be raised immediately and authentication will not be attempted. The
-     * <tt>unsuccessfulAuthentication()</tt> method will be called as if handling a failed
-     * authentication.
-     * <p>
-     * Defaults to <tt>true</tt> but may be overridden by subclasses.
-     */
+
     public void setPostOnly(boolean postOnly) {
         this.postOnly = postOnly;
     }
