@@ -1,8 +1,11 @@
 package com.security.demo.properties;
 
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
 public class CodeProperties {
 
-    private int rememberMeSeconds = 10;
+    private int rememberMeSeconds = 3600;
 
     public int getRememberMeSeconds() {
         return rememberMeSeconds;
