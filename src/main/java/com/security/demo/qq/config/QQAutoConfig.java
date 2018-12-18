@@ -27,3 +27,23 @@ public class QQAutoConfig extends SocialAutoConfigurerAdapter {
         return new QQConnectionFactory(qqProperties.getProviderId(), qqProperties.getAppId(), qqProperties.getAppSecret());
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

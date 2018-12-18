@@ -71,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and()
             .authorizeRequests()//对请求进行授权
-            .antMatchers("/login.html","/code/*").permitAll()//表示login.html路径不会被拦截
+            .antMatchers("/login.html","/code/*","/user/regist","/signup.html","/social/user").permitAll()//表示login.html路径不会被拦截
             .anyRequest()//表示所有请求
             .authenticated()//需要权限认证
             .and()

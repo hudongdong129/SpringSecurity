@@ -19,7 +19,8 @@ public class QQServiceProvider extends AbstractOAuth2ServiceProvider<QQ> {
      * @param oauth2Operations the OAuth2Operations template for conducting the OAuth 2 flow with the provider.
      */
     public QQServiceProvider(String appId, String appSecret) {
-        super(new OAuth2Template(appId, appSecret, URL_AUTHORIZE, URL_ACCESS_TOKEN));
+        super(new QQAuth2Template(appId, appSecret, URL_AUTHORIZE, URL_ACCESS_TOKEN));
+        this.appId = appId;
     }
 
     @Override
