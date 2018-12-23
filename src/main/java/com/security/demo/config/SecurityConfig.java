@@ -4,6 +4,7 @@ import com.security.demo.authentication.DemoAuthenticationFailureHandler;
 import com.security.demo.authentication.DemoAuthenticationSuccessHandler;
 import com.security.demo.filter.SmsCodeFilter;
 import com.security.demo.filter.ValidateCodeFilter;
+import com.security.demo.session.DemoExpiredSessionStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,8 +71,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenRepository(persistentTokenRepository())
 
             .and()
+                .sessionManagement()
+                .invalidSessionUrl("/session/invalid")
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(true)
+                .expiredSessionStrategy(new DemoExpiredSessionStrategy())
+                .and()
+            .and()
             .authorizeRequests()//对请求进行授权
-            .antMatchers("/login.html","/code/*","/user/regist","/signup.html","/social/user").permitAll()//表示login.html路径不会被拦截
+            .antMatchers("/login.html","/code/*","/user/regist","/signup.html","/social/user","/session/invalid").permitAll()//表示login.html路径不会被拦截
             .anyRequest()//表示所有请求
             .authenticated()//需要权限认证
             .and()
